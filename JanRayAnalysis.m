@@ -1,6 +1,6 @@
 guitar_files = {
-    'DATA/clean1.wav'
-    'DATA/janray.wav'
+    'DATA/source/clean1.wav'
+    'DATA/janray/janray.wav'
 };
 
 

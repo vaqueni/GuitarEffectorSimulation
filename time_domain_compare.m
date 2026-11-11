@@ -1,9 +1,6 @@
 files = {
-    'DATA/DELAY/g_delay.wav'
-    'DATA/gaussian_noise.wav'
-%    'DATA/sine wave.wav'
-%    'DATA/sine wave gain5.wav'
-%    'DATA/sine wave gain10.wav'
+    'DATA/delay/g_delay.wav'
+    'DATA/source/gaussian_noise.wav'
 
 };
 

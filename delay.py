@@ -82,8 +82,8 @@ def apply_guitar_delay_lti(
 
 
 if __name__ == "__main__":
-    input_shortcut = "DATA/"
-    output_shortcut = "DATA/DELAY/"
+    input_shortcut = "DATA/source/"
+    output_shortcut = "DATA/delay/"
 
     input_files = [
 #        
@@ -92,8 +92,8 @@ if __name__ == "__main__":
 #         "gaussian_noise.wav",
 #         "clean1.wav",
 # 
-#        "clean2.wav"
-        "sine_sweep.wav"
+        # "clean2.wav"
+        # "sine_sweep.wav"
             ]
 
     output_files = [
@@ -103,7 +103,7 @@ if __name__ == "__main__":
         # "g_delay.wav",
         # "c_delay.wav",
 #
-        "ss_delay.wav"
+        # "ss_delay.wav"
     ]
 
     os.makedirs(output_shortcut, exist_ok=True)

@@ -7,14 +7,14 @@ clc; clear; close all;
 
 %% 0) 비교 대상 파일 직접 입력
 
-refFile = 'DATA/DELAY/c2_delay.wav';
+refFile = 'DATA/delay/c2_delay.wav';
 
 compareFiles = {
-    'OUTPUT/DELAY/c_delay_output.wav'
-    'OUTPUT/DELAY/g_delay_output.wav'
-    'OUTPUT/DELAY/i_delay_output.wav'
-    'OUTPUT/DELAY/s_delay_output.wav'
-    'OUTPUT/DELAY/ss_delay_output.wav'
+    'OUTPUT/delay/c_delay_output.wav'
+    'OUTPUT/delay/g_delay_output.wav'
+    'OUTPUT/delay/i_delay_output.wav'
+    'OUTPUT/delay/s_delay_output.wav'
+    'OUTPUT/delay/ss_delay_output.wav'
 };
 
 %% 1) 기준 파일 읽기
@@ -104,8 +104,8 @@ fprintf('Log Spectral RMSE: %.4f dB\n', results.LogSpectralRMSE(1));
 
 %% 7) CSV 저장
 
-writetable(results, 'wav_similarity_ranking.csv');
-fprintf('\n결과 저장 완료: wav_similarity_ranking.csv\n');
+writetable(results, 'OUTPUT/wav_similarity_ranking.csv');
+fprintf('\n결과 저장 완료: OUTPUT/wav_similarity_ranking.csv\n');
 
 
 %% ============================================================

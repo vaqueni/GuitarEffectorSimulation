@@ -1,42 +1,42 @@
 
 IN = {
-    'DATA/sine_440Hz.wav' 
-    'DATA/impulse_response.wav'
-    'DATA/gaussian_noise.wav'
-    'DATA/clean1.wav'
+    'DATA/source/sine_440Hz.wav' 
+    'DATA/source/impulse_response.wav'
+    'DATA/source/gaussian_noise.wav'
+    'DATA/source/clean1.wav'
     
-    'DATA/sine_440Hz.wav' 
-    'DATA/impulse_response.wav'
-    'DATA/gaussian_noise.wav'
-    'DATA/clean1.wav'
-    'DATA/sine_sweep.wav'
+    'DATA/source/sine_440Hz.wav' 
+    'DATA/source/impulse_response.wav'
+    'DATA/source/gaussian_noise.wav'
+    'DATA/source/clean1.wav'
+    'DATA/source/sine_sweep.wav'
     };
 
 
 OUT = {
-    'DATA/f(sine_440Hz).wav' 
-    'DATA/f(impulse_response).wav' 
-    'DATA/f(gaussian_noise).wav'
-    'DATA/janray.wav'
+    'DATA/janray/f(sine_440Hz).wav' 
+    'DATA/janray/f(impulse_response).wav' 
+    'DATA/janray/f(gaussian_noise).wav'
+    'DATA/janray/janray.wav'
     
-    'DATA/DELAY/s_delay.wav'
-    'DATA/DELAY/i_delay.wav'
-    'DATA/DELAY/g_delay.wav'
-    'DATA/DELAY/c_delay.wav'
-    'DATA/DELAY/ss_delay.wav'
+    'DATA/delay/s_delay.wav'
+    'DATA/delay/i_delay.wav'
+    'DATA/delay/g_delay.wav'
+    'DATA/delay/c_delay.wav'
+    'DATA/delay/ss_delay.wav'
     };
 
 output_file_name = {
-    'OUTPUT/s_estimated_output.wav'
-    'OUTPUT/i_estimated_output.wav'
-    'OUTPUT/g_estimated_output.wav'
-    'OUTPUT/c_estimated_output.wav'
+    'OUTPUT/janray/s_estimated_output.wav'
+    'OUTPUT/janray/i_estimated_output.wav'
+    'OUTPUT/janray/g_estimated_output.wav'
+    'OUTPUT/janray/c_estimated_output.wav'
 
-    'OUTPUT/DELAY/s_delay_output.wav'
-    'OUTPUT/DELAY/i_delay_output.wav'
-    'OUTPUT/DELAY/g_delay_output.wav'
-    'OUTPUT/DELAY/c_delay_output.wav'
-    'OUTPUT/DELAY/ss_delay_output.wav'
+    'OUTPUT/delay/s_delay_output.wav'
+    'OUTPUT/delay/i_delay_output.wav'
+    'OUTPUT/delay/g_delay_output.wav'
+    'OUTPUT/delay/c_delay_output.wav'
+    'OUTPUT/delay/ss_delay_output.wav'
 };
 
 %% num 값으로 어떤 데이터를 이용하는 지 적용
@@ -45,7 +45,7 @@ num = 7;
 % 파일 경로
 in  = IN{num};
 out = OUT{num};
-test_in      = 'DATA/clean2.wav';
+test_in      = 'DATA/source/clean2.wav';
 
 % 읽기
 [x, fs] = audioread(in);

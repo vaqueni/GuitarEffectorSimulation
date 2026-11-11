@@ -1,0 +1,11 @@
+# MATLAB autosave files
+*.asv
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Accidental core dumps
+core
+DATA/core
