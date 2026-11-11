@@ -9,3 +9,8 @@ __pycache__/
 # Accidental core dumps
 core
 DATA/core
+
+# NAM: virtual env, training runs, capture recordings (not published)
+.venv/
+nam/runs/
+nam/capture/

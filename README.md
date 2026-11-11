@@ -1,6 +1,7 @@
 # 🎸 Guitar Effector Simulation
 
 **입력 신호 · 시스템 · 출력 신호** 쌍으로 이펙터의 전달함수를 추정하고, 그 전달함수가 다른 신호에서도 같은 소리를 만들어내는지 확인하는 DSP 프로젝트입니다.
+전달함수로 표현되지 않는 오버드라이브(JanRay)는 신경망 모델(NAM)로 다시 모델링해 실제 페달과 비교했습니다.
 MATLAB과 Python을 함께 사용합니다.
 
 ---
@@ -69,6 +70,34 @@ LTI 시스템은 입력에 있는 주파수의 크기와 위상만 바꿀 수 �
 
 정답인 `DATA/delay/c2_delay.wav`(clean2에 Delay를 실제로 적용한 신호)와 각 전달함수의 결과를 비교해, 어떤 입력 신호로 추정한 전달함수가 가장 정확한지 점수를 매겼습니다 → `OUTPUT/wav_similarity_ranking.csv`
 
+### 5단계 — 비선형인 JanRay를 신경망(NAM)으로 모델링
+
+2단계에서 JanRay가 LTI 시스템이 아니라는 것을 확인했으므로, 비선형까지 학습하는 신경망 모델 [NAM(Neural Amp Modeler)](https://github.com/sdatkinson/neural-amp-modeler)으로 페달을 다시 모델링했습니다.
+학습에는 NAM 표준 입력 신호를 페달에 통과시킨 별도 녹음을 썼고, 평가는 1단계와 같은 `clean1.wav` → `janray.wav` 쌍으로 했습니다. `clean1.wav`는 학습에 쓰지 않았습니다.
+
+| 방법 | ESR (낮을수록 페달과 비슷) |
+|---|---:|
+| 원신호 그대로 (페달 없음) | 0.384 |
+| 전달함수, `gaussian_noise`로 추정 | 0.841 |
+| 전달함수, `sine_440Hz`로 추정 | 0.986 |
+| 전달함수, `impulse_response`로 추정 | 0.997 |
+| 전달함수, `clean1` 자신으로 추정 (같은 데이터) | 0.0217 |
+| NAM full, 기본 설정 | 0.0041 |
+| NAM lite, 기본 설정 | 0.0101 |
+| NAM full, MRSTFT 끔 | **0.0020** |
+| NAM lite, MRSTFT 끔 | **0.0036** |
+
+<sub>ESR = 오차 에너지 / 페달 신호 에너지. 모두 소수 샘플까지 지연을 맞추고 게인 하나로 레벨을 맞춘 뒤 계산했습니다 (`nam/eval/compare_clean1.m`).</sub>
+
+- 다른 신호로 추정한 전달함수는 원신호를 그대로 쓰는 것보다도 페달과 멀었습니다. 1–2단계의 결론과 같습니다.
+- `clean1` 자신으로 추정한 전달함수는 평가할 신호의 답을 보고 만든 것이라 공정한 비교가 아닙니다. 그래도 처음 보는 `clean1`을 처리한 NAM 네 모델이 모두 이보다 ESR이 2–11배 낮습니다.
+- NAM 기본 설정은 6 kHz 이상 고음을 페달보다 크게 만들었습니다. 원인은 스펙트럼 크기만 비교하는 MRSTFT 손실이었고, 이 손실만 끄고 다시 학습하니 ESR이 절반 아래로 줄었습니다.
+- full은 8채널 WaveNet, lite는 3채널 WaveNet입니다. lite는 Raspberry Pi 4 실시간 실행 후보입니다.
+
+![현재 모델과 MRSTFT를 끈 모델의 스펙트럼 차이, 코히어런스, 대역별 잔차](nam/eval/compare_nomrstft.png)
+
+학습 방법, 고음 초과 원인 분석, 청음 파일, 한계는 [nam/README.md](nam/README.md)에 정리했습니다.
+
 ---
 
 ## 🗂️ 프로젝트 구조
@@ -101,7 +130,13 @@ Audio DSP/
 ├── sin_janray.m                 # 사인파 배음 dB 스펙트럼 → JanRay의 비선형성 (2단계)
 ├── JanRayAnalysis.m             # clean1 vs janray 스펙트럼 비교 (2단계)
 ├── time_domain_compare.m        # Delay 전후 파형 비교 (3단계)
-└── compare_similarity.m         # 유사도 정량 분석 (4단계)
+├── compare_similarity.m         # 유사도 정량 분석 (4단계)
+│
+└── nam/                         # NAM 신경망 모델 (5단계, 자세한 내용은 nam/README.md)
+    ├── models/                  # janray.nam, janray_nomrstft.nam
+    ├── eval/                    # 렌더링, MATLAB 비교, 청음 파일
+    ├── train_nam.py             # 학습 후 .nam 내보내기
+    └── samplerate.py            # 학습용 wav 확인
 ```
 
 ---
@@ -114,6 +149,8 @@ Audio DSP/
 ```bash
 pip install numpy scipy pytest
 ```
+
+5단계(NAM)는 PyTorch, `neural-amp-modeler` 0.13.0, `soundfile`이 추가로 필요합니다. 설치 순서는 [nam/README.md](nam/README.md)를 따릅니다.
 
 모든 스크립트는 **프로젝트 최상위 폴더에서** 실행합니다 (`DATA/...` 상대경로 사용).
 
